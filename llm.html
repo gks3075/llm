@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LLM Demo</title>
+</head>
+<body>
+  <!-- <label for="input">입력</label> -->
+  <form id="form">
+    <input type="text" id="input" placeholder="문장을 입력하세요" autofocus>
+    <button type="submit"id="submitButton">제출하기</button>
+  </form>
+  <div>
+    <ul id = "context">
+
+    </ul>
+  </div>
+</body>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+  const URL = "http://127.0.0.1:8080"
+  function getChatGPT(input) {
+    axios.get(URL + `?text=${input}`)
+    .then(res => {
+      console.log(res)
+      console.log(res.data.reply)
+      const li = document.createElement("li")
+      li.innerText = `답변 : ${res.data.reply}`
+      document.getElementById("context").appendChild(li)
+    })
+  }
+
+  function sub(input) {
+    const li = document.createElement("li")
+    li.innerText = `입력 : ${input}`
+    document.getElementById("context").appendChild(li)
+  }
+
+  const submit = document.querySelector('#form')
+  // const submit = document.getElementById('submitButton')
+  submit.addEventListener('submit', (event) => {
+    event.preventDefault()
+    const input = document.getElementById('input').value
+    sub(input)
+    getChatGPT(input)
+    submit.reset()
+  })
+
+</script>
+</html>
